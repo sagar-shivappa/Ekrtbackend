@@ -1,8 +1,8 @@
 const User = require("../models/user.model");
+const Product = require("../models/product.model");
+const Cart = require("../models/cart.model");
 const jwt = require("jsonwebtoken");
-const bycrypt = require("bcrypt");
 
-// all test cases clear expect 500
 const postLoginUser = async (req, res) => {
   //  Complete this Function
   try {
@@ -22,7 +22,7 @@ const postLoginUser = async (req, res) => {
         });
         res.status(201).send({ user_name: user.user_name, token });
       } else {
-        res.status(404).send({ message: "User Not found" });
+        res.status(403).send({ message: "User Not found" });
       }
     } else {
       res.status(400).send("Validation Error");
@@ -32,75 +32,89 @@ const postLoginUser = async (req, res) => {
   }
 };
 
-const getAllStudents = async (req, res) => {
+const getAllProducts = async (req, res) => {
   //  Complete this Function
   try {
-    const students = await User.find();
-    if (students.length > 0) {
-      res.status(200).send(students);
+    const products = await Product.find();
+    if (products.length > 0) {
+      res.status(200).send(products);
     } else {
-      res.status(404).send("No Student found");
+      res.status(204).send("No products found");
+    }
+  } catch (error) {
+    res.status(500).json(error.message);
+  }
+};
+
+const getCartItemsByUserId = async (req, res) => {
+  //  Complete this Function
+  try {
+    const cartItems = await Cart.findOne({ user_id: req.params.user_id });
+    if (cartItems) {
+      res.status(200).send(cartItems);
+    } else {
+      res.status(404).send("User Not Found");
     }
   } catch (error) {
     res.status(500).json(error);
   }
 };
 
-const getStudentById = async (req, res) => {
-  //  Complete this Function
+const addToCart = async (req, res) => {
+  //  validate the product if already in the cart list, if not present, add it to the user id
   try {
-    const student = await Student.findById(req.params.studentId);
-    if (student) {
-      res.status(200).send(student);
-    } else {
-      res.status(404).send("No student with given id");
-    }
-  } catch (error) {
-    res.status(500).json(error);
-  }
-};
+    const cartItems = await Cart.findOne({
+      user_id: req.body.user_id,
+      "products.product_id": req.body.product.product_id,
+    });
 
-const updateStudentDataByID = async (req, res) => {
-  const userId = req.params.studentId;
-  const updateData = req.body;
-  try {
-    // Validate request body against the Mongoose schema
-    if (Object.keys(updateData).length < 1) {
-      res.status(400).send("error body");
+    if (cartItems) {
+      res.status(400).send("Product Already in the CART");
     } else {
-      Student.findByIdAndUpdate(userId, updateData, { new: true }).then(
-        (oldStudent) => {
-          if (oldStudent) {
-            res.status(204).send(oldStudent);
-          } else {
-            res.status(404).json("No student with given id");
-          }
-        }
+      const product = new Product(req.body.product);
+      await product.validate();
+      await Cart.findOneAndUpdate(
+        { user_id: req.body.user_id },
+        { $push: { products: product } },
+        { returnOriginal: true }
       );
+      res.status(201).send("Successfully Added to CART");
     }
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json(error.message);
   }
 };
 
-const deleteStudentById = async (req, res) => {
-  //  Complete this Function
-  try {
-    const deletedUser = await Student.findByIdAndDelete(req.params.studentId);
-    if (deletedUser) {
-      res.status(200).send({ message: "Deleted" });
-    } else {
-      res.status(404).send("No student with given id");
-    }
-  } catch (error) {
-    res.status(500).json("Error Occured :(");
+const removeFromCart = async (req, res) => {
+  //  Complete this Function // Unable to remove a element from the products list --- checking
+
+  const userId = req.params.user_id;
+  const productId = req.params.product_id;
+  //Get the available products in the cart
+  const productsList = await Cart.findOne(
+    { user_id: userId },
+    { products: 1, _id: 0 }
+  );
+  //remove the desired product from the list
+  const updatedCart = productsList.products.filter(
+    (item) => item.product_id != productId
+  );
+  //Update the cart asper the new product list
+  if (productsList.products.length == updatedCart.length) {
+    res.status(404).send("Product not found");
+  } else {
+    Cart.updateOne({ user_id: userId }, { $set: { products: updatedCart } })
+      .then((data) => {
+        res.status(201).send("Product Removed Successfully");
+      })
+      .catch((error) => res.status(500).send(error));
   }
 };
 
 module.exports = {
   postLoginUser,
-  getAllStudents,
-  getStudentById,
-  deleteStudentById,
-  updateStudentDataByID,
+  getAllProducts,
+  getCartItemsByUserId,
+  removeFromCart,
+  addToCart,
 };

@@ -1,28 +1,28 @@
 const express = require("express");
 
 const {
-  getAllStudents,
-  getStudentById,
+  getAllProducts,
+  getCartItemsByUserId,
   postLoginUser,
-  deleteStudentById,
-  updateStudentDataByID,
+  removeFromCart,
+  addToCart,
 } = require("../controllers/ekart.controller");
 
 const router = express.Router();
 
-//Add route to Post a new student data
+//Add route to Post user login credenetails
 router.post("/login", postLoginUser);
 
-//Add route to Get all students
-router.get("/students", getAllStudents);
+//Add route to Get all products
+router.get("/products", getAllProducts);
 
-//Add route to Get a students by id
-router.get("/student/:studentId", getStudentById);
+//Add route to Get a user cart items by userid
+router.get("/cart/:user_id", getCartItemsByUserId);
 
-//Add route to Update a students by id
-router.put("/student/:studentId", updateStudentDataByID);
+//Add route to Add products to the cart
+router.post("/cart", addToCart);
 
-//Add route to Delete a students by id
-router.delete("/student/:studentId", deleteStudentById);
+//Add route to Delete a product by id
+router.delete("/cart/:user_id/:product_id", removeFromCart);
 
 module.exports = router;
