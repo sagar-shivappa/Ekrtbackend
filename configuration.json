@@ -1,36 +1,38 @@
-    {
-        "version" : "1.0",
-        "read_only_files" : [
-            ".env",
-            ".gitignore"
-        ],
-        "default_open_files": ["controllers/ekart.controller.js","README.md"],
-        "scoring" : {
-            "command" : "npm install && npm test",
-            "files" : {
-                "junit.xml" : "Backend API tests Nodejs",
-                "my_2_junit.xml" : "React"
-            },
-            "testcase_weights" : {
-                "GET /products should return all gadgets if they exists" : 2,
-                "GET /cart/:user_id should return 500 if error" : 3
-            }
-        },
-        "buttons" : {
-            "build" : {
-                "command" : "npm install"
-            },
-            "start_server" : {
-                "command" : "npm start",
-                "dependencies" : ["npm install"]
-            },
-            "test" : {
-                "command" :"npm test",
-                "dependencies" : ["npm install"]
-            },
-            "start_mongodb" : {
-                "command" : "mongod --dbpath /var/lib/mongo --logpath /var/log/mongodb/mongod.log"
-            }
-        }
+{
+    "version" : "1.0",
+    "read_only_files" : [
+        ".env",
+        "/tests/App.test.js",
+        ".gitignore",
+        "configuration.json"
 
+    ],
+    "default_open_files": ["controllers/ekart.controller.js","/routes/ekart.route.js"],
+    "scoring" : {
+        "command" : "npm install && npm test",
+        "files" : {
+            "junit.xml" : "Backend API tests Nodejs"
+        },
+        "testcase_weights" : {
+            "GET /products should return all gadgets if they exists" : 2,
+            "GET /cart/:user_id should return 500 if error" : 3
+        }
+    },
+    "buttons" : {
+        "Install Packages" : {
+            "command" : "npm install"
+        },
+        "Start API Server" : {
+            "command" : "npm start",
+            "dependencies" : ["npm install"]
+        },
+        "Run Test Cases" : {
+            "command" :"npm test",
+            "dependencies" : ["npm install"]
+        },
+        "Start MongoDB" : {
+            "command" : "mongod --dbpath /var/lib/mongo --logpath /var/log/mongodb/mongod.log"
+        }
     }
+
+}
