@@ -47,7 +47,7 @@ Implement the following functions:
 
   - Takes a user ID as a parameter.
   - Searches the collection for the document with the matching ID.
-  - If found, sends the gadget object as a JSON response with a 200 status code.
+  - If found, sends the product list as a JSON response with a 200 status code.
   - If the ID is not found, sends a 204 status code.
   - Errors during retrieval are handled with a 500 status code and an error message.
 
