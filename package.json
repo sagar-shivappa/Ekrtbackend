@@ -4,7 +4,7 @@
   "description": "School Management System Node-Express-Mongo Backend",
   "main": "server.js",
   "scripts": {
-    "test": "cross-env NODE_ENV=test jest --testTimeout=5000",
+    "test": "cross-env NODE_ENV=test jest --testTimeout=5000 --forceExit",
     "start": "nodemon server.js"
   },
   "repository": {
