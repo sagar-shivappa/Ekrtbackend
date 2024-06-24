@@ -47,7 +47,7 @@ Implement the following functions:
 
   - Takes a user ID as a parameter.
   - Searches the collection for the document with the matching ID.
-  - If found, sends the gadget object as a JSON response with a 200 status code.
+  - If found, sends the products object as a JSON response with a 200 status code.
   - If the ID is not found, sends a 204 status code.
   - Errors during retrieval are handled with a 500 status code and an error message.
 
@@ -89,6 +89,7 @@ Define routes for the API endpoints:
 
   - Handles POST requests to add the new product to cart of that particular user.
   - Calls the `addToCart` function from the `ekart.controller.js` file.
+    fgade
 
 - **`/cart/user_id/product_id`**:
   - Handles PUT requests to remove the product from cart for that particular user.
