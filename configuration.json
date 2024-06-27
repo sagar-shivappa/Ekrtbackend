@@ -2,33 +2,35 @@
     "version" : "1.0",
     "read_only_files" : [
         ".env",
-        ".gitignore"
+        "/tests/App.test.js",
+        ".gitignore",
+        "configuration.json"
+
     ],
-    "default_open_files": ["controllers/ekart.controller.js","README.md"],
+    "default_open_files": ["controllers/ekart.controller.js","/routes/ekart.route.js"],
     "scoring" : {
         "command" : "npm install && npm test",
         "files" : {
-            "junit.xml" : "Backend API tests Nodejs",
-            "my_2_junit.xml" : "React"
+            "junit.xml" : "Backend API tests Nodejs"
         },
         "testcase_weights" : {
-            "GET /api/gadgets should return all gadgets if they exists" : 2,
-            "GET /api/gadget/:id should return 500 if error" : 3
+            "GET /products should return all gadgets if they exists" : 2,
+            "GET /cart/:user_id should return 500 if error" : 3
         }
     },
     "buttons" : {
-        "build" : {
+        "Install Packages" : {
             "command" : "npm install"
         },
-        "start_server" : {
+        "Start API Server" : {
             "command" : "npm start",
             "dependencies" : ["npm install"]
         },
-        "test" : {
+        "Run Test Cases" : {
             "command" :"npm test",
             "dependencies" : ["npm install"]
         },
-        "start_mongodb" : {
+        "Start MongoDB" : {
             "command" : "mongod --dbpath /var/lib/mongo --logpath /var/log/mongodb/mongod.log"
         }
     }
