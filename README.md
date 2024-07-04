@@ -24,8 +24,6 @@ The goal is to create a user-friendly API that allows the client to:
 
 ### [controllers/ekart.controller.js](controllers/ekart.controller.js):
 
-### [middleware/tokenValidator.js](cmiddleware/tokenValidator.js):
-
 Implement the following functions:
 
 - **`postLoginUser`**:
@@ -65,6 +63,17 @@ Implement the following functions:
   - If found, sends the product object as a JSON response with a 201 status code and message "Product successfully removed".
   - If the product is not found, sends a 404 status code, with message “Product not found”
   - Errors during retrieval are handled with a 500 status code and an error message.
+
+### [middleware/tokenValidator.js](middleware/tokenValidator.js)
+
+Complete the tokenValidator function to validate jwt token, consider
+
+- For route '/login', no token validation is required
+- Token should be passed in the headers, as authorization
+- Token type should be of type Bearer
+- secretkey is provided in .env file, use the same for validation
+- Return error code of 400, if the invalid token / invalid token type/ token not found
+- On successful validation, pass the function next();
 
 ### [routes/ekart.route.js](routes/ekart.route.js):
 
