@@ -65,20 +65,26 @@ const addToCart = async (req, res) => {
   try {
     const cartItems = await Cart.findOne({
       user_id: req.body.user_id,
-      "products.product_id": req.body.product.product_id,
+      "products.product_id": req.body.product_id,
     });
 
     if (cartItems) {
       res.status(400).send("Product Already in the CART");
     } else {
-      const product = new Product(req.body.product);
-      await product.validate();
-      await Cart.findOneAndUpdate(
-        { user_id: req.body.user_id },
-        { $push: { products: product } },
-        { returnOriginal: true }
-      );
-      res.status(201).send("Successfully Added to CART");
+      //Get the product using product_id
+      const product = await Product.findOne({
+        product_id: req.body.product_id,
+      });
+      if (product) {
+        await Cart.findOneAndUpdate(
+          { user_id: req.body.user_id },
+          { $push: { products: product } },
+          { returnOriginal: true }
+        );
+        res.status(201).send("Successfully Added to CART");
+      } else {
+        res.status(400).send("Invalid Product Information");
+      }
     }
   } catch (error) {
     res.status(500).json(error.message);
